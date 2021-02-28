@@ -1,16 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Commander.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Commander.Data;
 
 namespace Commander.Controllers
 {
-    public class CommandsController : Controller
+    [Route("api/commands")]
+    [ApiController]
+    public class CommandsController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly MockCommanderRepo _repository = new MockCommanderRepo();
+        [HttpGet]
+        public ActionResult<IEnumerable<Command>> GetAllCommands()
         {
-            return View();
+            var commandItems = _repository.GetAllCommands();
+
+            return Ok(commandItems);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Command> GetCommandById(int id)
+        {
+            var commandItem = _repository.GetCommandById(id);
+
+            return Ok(commandItem);
         }
     }
 }
